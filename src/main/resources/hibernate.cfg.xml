@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- Configuración de Conexión a Base de Datos MySQL 8.0 -->
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/flotas_uraba?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">12345</property>
+
+        <!-- Dialecto para MySQL -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- Opciones de depuración SQL -->
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+
+        <!-- Creación y actualización automática de tablas (DDL) -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!-- Clases de Entidades Mapeadas -->
+        <mapping class="com.flotasuraba.entity.Vehiculo"/>
+        <mapping class="com.flotasuraba.entity.Ruta"/>
+        <mapping class="com.flotasuraba.entity.Conductor"/>
+    </session-factory>
+</hibernate-configuration>
