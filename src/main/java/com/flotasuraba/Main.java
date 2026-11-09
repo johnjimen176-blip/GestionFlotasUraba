@@ -109,24 +109,56 @@ public class Main {
             e.printStackTrace();
         }
 
-        // 3. OPERACION UPDATE (Actualizar estado de vehiculo a EN_DESPACHO)
-        System.out.println("\n>>> [FASE 3 - UPDATE] Actualizando estado del vehículo...");
+        // 3. OPERACION UPDATE (Actualizar los registros de las tres entidades)
+        System.out.println("\n>>> [FASE 3 - UPDATE] Actualizando registros...");
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
             Vehiculo v = session.get(Vehiculo.class, vehiculoId);
+            Ruta r = session.get(Ruta.class, rutaId);
+            Conductor c = session.get(Conductor.class, conductorId);
             if (v != null) {
                 v.setEstado("EN_DESPACHO");
-                session.merge(v);
-                tx.commit();
                 System.out.println("   [OK] Estado del vehículo ID " + vehiculoId + " actualizado a: " + v.getEstado());
             }
+            if (r != null) {
+                r.setPrecio(12500.0);
+                System.out.println("   [OK] Tarifa de la ruta ID " + rutaId + " actualizada a: $" + r.getPrecio() + " COP");
+            }
+            if (c != null) {
+                c.setTelefono("3001234567");
+                System.out.println("   [OK] Teléfono del conductor ID " + conductorId + " actualizado a: " + c.getTelefono());
+            }
+            tx.commit();
         } catch (Exception e) {
             System.err.println(">>> Error durante la fase UPDATE: " + e.getMessage());
             e.printStackTrace();
         }
 
-        // 4. CIERRE LIMPIO DE HIBERNATE
-        System.out.println("\n>>> [FINALIZADO] Prueba de persistencia JPA y conexión a MySQL completada con éxito.");
+        // 4. OPERACION DELETE (Eliminar los registros creados por esta ejecución)
+        System.out.println("\n>>> [FASE 4 - DELETE] Eliminando registros de prueba...");
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            Vehiculo v = session.get(Vehiculo.class, vehiculoId);
+            Ruta r = session.get(Ruta.class, rutaId);
+            Conductor c = session.get(Conductor.class, conductorId);
+            if (v != null) {
+                session.remove(v);
+            }
+            if (r != null) {
+                session.remove(r);
+            }
+            if (c != null) {
+                session.remove(c);
+            }
+            tx.commit();
+            System.out.println("   [OK] Registros de prueba eliminados.");
+        } catch (Exception e) {
+            System.err.println(">>> Error durante la fase DELETE: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        // 5. CIERRE LIMPIO DE HIBERNATE
+        System.out.println("\n>>> [FINALIZADO] Prueba CRUD y conexión a MySQL completada con éxito.");
         HibernateUtil.shutdown();
         System.out.println("================================================================================");
     }
